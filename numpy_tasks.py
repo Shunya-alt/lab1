@@ -16,18 +16,6 @@ def sum_prod(data: MatrixVectorBatchInput) -> np.ndarray:
         result += matrices[i] @ vectors[i]
     return result
 
-# тест для sum_prod
-A1 = np.array([[1, 2], [3, 4]])
-A2 = np.array([[0, 1], [1, 0]])
-x1 = np.array([[3], [4]])
-x2 = np.array([[1], [2]])   
-matrices = np.array([A1, A2])    
-vectors  = np.array([x1, x2])        
-data = MatrixVectorBatchInput(matrices, vectors)
-print(sum_prod(data))
-    # Ожидаем:
-    # [[13]
-    #  [26]]
 
 def binarize(data: BinarizeInput) -> np.ndarray:
     matrix, threshold = data.matrix, data.threshold
@@ -35,12 +23,6 @@ def binarize(data: BinarizeInput) -> np.ndarray:
     result = mask.astype(int)
     return result
 
-#тест для binarize
-M = np.array([[1, 5, 3], [4, 2, 6]])
-result = binarize(BinarizeInput(M, 3))
-print(result)
-# [[0 1 0]
-# [1 0 1]]
 
 def unique_rows(data: MatrixInput) -> list[list[float]]:
     matrix = data.matrix
@@ -59,17 +41,6 @@ def unique_columns(data: MatrixInput) -> list[list[float]]:
         result.append(unique_values)
     return result
 
-#тест для unique_rows
-M = np.array([[1, 2, 1, 3], [5, 5, 5, 5]])
-result = unique_rows(MatrixInput(M))
-print(result) #[[1, 2, 3], [5]]
-
-#тест для unique_columns
-M = np.array([[1, 2, 1],
-              [5, 5, 5],
-              [1, 2, 3]])
-result = unique_columns(MatrixInput(M))
-print(result) #[[1, 5], [2, 5], [1, 5, 3]]
 
 def matrix_statistics(data: RandomMatrixInput) -> MatrixStatistics:
     rows, columns, mean, std, seed = data.rows, data.columns, data.mean, data.std, data.seed
@@ -89,14 +60,6 @@ def matrix_statistics(data: RandomMatrixInput) -> MatrixStatistics:
         column_variances=column_variances,
     )
 
-#тест для matrix_statistics
-data = RandomMatrixInput(rows=3, columns=4, mean=0.0, std=1.0, seed=42)
-r = matrix_statistics(data)
-print(r.matrix.shape)           # (3, 4)
-print(r.row_means.shape)         # (3,)
-print(r.column_means.shape)      # (4,)
-print(r.row_variances.shape)     # (3,)
-print(r.column_variances.shape)  # (4,)
 
 
 def chess(data: ChessInput) -> np.ndarray:
@@ -111,11 +74,6 @@ def chess(data: ChessInput) -> np.ndarray:
     
     return matrix
 
-#тест для chess
-result = chess(ChessInput(rows=3, columns=4, first=0, second=1))
-print(result)
-result = chess(ChessInput(rows=2, columns=3, first=7, second=9))
-print(result)
 
 def draw_rectangle(data: RectangleInput) -> np.ndarray:
     width, height = data.width, data.height
@@ -149,23 +107,6 @@ def draw_ellipse(data: EllipseInput) -> np.ndarray:
     image[mask] = shape_color   
     return image
 
-# Тест для draw_rectangle
-img = draw_rectangle(RectangleInput(
-    width=4, height=2,
-    image_height=6, image_width=8,
-    shape_color=(255, 0, 0),
-    background_color=(0, 0, 0),
-))
-print(img.shape)           # (6, 8, 3)
-
-# Тест для draw_ellipse
-img = draw_ellipse(EllipseInput(
-    semi_axis_x=2, semi_axis_y=1,
-    image_height=5, image_width=7,
-    shape_color=(0, 255, 0),
-    background_color=(0, 0, 0),
-))
-print(img.shape)           # (5, 7, 3)
 
 def analyze_time_series(data: TimeSeriesInput) -> TimeSeriesStatistics:
     values, window = data.values, data.window
@@ -194,15 +135,6 @@ def analyze_time_series(data: TimeSeriesInput) -> TimeSeriesStatistics:
         moving_average=moving_average,
     )
 
-#тесты для analyze_time_series 
-values = np.array([1, 3, 2, 5, 1, 4], dtype=float)
-result = analyze_time_series(TimeSeriesInput(values=values, window=3))
-print(result.mean)                    # 16/6 ≈ 2.666...
-print(result.variance)                # 
-print(result.std)                     # 
-print(result.local_maxima_indices)    # [1, 3]
-print(result.local_minima_indices)    # [2, 4]
-print(result.moving_average)          # [2.0, 3.33, 2.67, 3.33]
 
 def one_hot(data: OneHotInput) -> np.ndarray:
     labels, class_count = data.labels, data.class_count
@@ -212,12 +144,3 @@ def one_hot(data: OneHotInput) -> np.ndarray:
     result = np.zeros((n, class_count), dtype=int)
     result[np.arange(n), labels] = 1 
     return result
-
-#тесты для one_hot
-labels = np.array([0, 2, 3, 0])
-result = one_hot(OneHotInput(labels=labels, class_count=4))
-print(result)
-# [[1 0 0 0]
-# [0 0 1 0]
-# [0 0 0 1]
-# [1 0 0 0]]
